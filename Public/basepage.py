@@ -30,7 +30,7 @@ class BasePage(object):
         :param apk_path: apk文件本地路径
         '''
         packagename = get_apk_info(apk_path)['package']
-        log.i('apk info ----> %s' % get_apk_info(apk_path))
+        log.i('apk info ----> %s' % packagename)
 
         if clear:
             log.i("Clear Device %s folder" % packagename)

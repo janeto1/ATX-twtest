@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import datetime
+
 import uiautomator2 as u2
 from logzero import logger
 import time
@@ -13,6 +15,8 @@ from Public.log import Log
 from Public.config import maxin_path
 
 log = Log()
+
+
 # maxin_path = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'Maxim')
 
 
@@ -25,7 +29,7 @@ class Maxim(BasePage):
 
     @classmethod
     def command(cls, package, runtime, mode=None, whitelist=False, blacklist=False, throttle=None, options=None,
-                off_line=True):
+                off_line=True, logpath=None):
         '''
         monkey命令封装
         :param package:被测app的包名
@@ -67,7 +71,12 @@ class Maxim(BasePage):
         else:
             blacklist = ''
 
-        off_line_cmd = ' >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &'
+        # 初始化日志目录
+        log_info = f'{logpath}/monkeyout.txt'
+        log_err = f'{logpath}/monkeyerr.txt'
+
+        off_line_cmd = f' >{log_info} 2>{log_err} &'
+        # off_line_cmd = ' >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &'
         if off_line:
             monkey_shell = (
                 ''.join([classpath, package, runtime, mode, whitelist, blacklist, throttle, options, off_line_cmd]))
@@ -141,7 +150,7 @@ class Maxim(BasePage):
 
     @classmethod
     def push_widget_black(cls):
-        cls.d.push(os.path.join(maxin_path,'max.widget.black'), '/sdcard/max.widget.black')
+        cls.d.push(os.path.join(maxin_path, 'max.widget.black'), '/sdcard/max.widget.black')
         log.i('push widget_black file---> max.widget.black ')
 
     @classmethod
@@ -183,6 +192,6 @@ if __name__ == '__main__':
     log.set_logger('udid', './log.log')
     maxim = Maxim()
     maxim.set_driver(None)
-    command = maxim.command(package='com.quvideo.xiaoying', runtime=2, mode='uiautomatormix', throttle=100,
-                            options=' -v -v ', whitelist=True, off_line=True)
+    command = maxim.command(package='com.quvideo.xiaoying', runtime=2, mode=None, throttle=100,
+                            options=' -v -v ', whitelist=True, off_line=True, logpath='D:/code/ATX-Test/log')
     maxim.run_monkey(command)

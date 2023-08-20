@@ -28,6 +28,7 @@ import apkutils
 import json
 from logzero import logger
 from Public.log import Log
+from apkutils import APK, __version__, apkfile
 log = Log()
 
 
@@ -152,10 +153,19 @@ def get_apk_info(bundle_path):
     else:
         path = bundle_path
 
-    tmp = apkutils.APK(path).get_manifest()
-    info = {'package': str(tmp.get('@package')),
-            'versionCode': str(tmp.get('@android:versionCode')),
-            'versionName': str(tmp.get('@android:versionName')),
+
+    apk = APK()
+    apk.from_file(path)
+    apk.parse_resouce()
+    # tmp = apk.get_manifest()
+    # tmp = apkutils.APK.from_file(path).get_manifest()
+    # info = {'package': str(tmp.get('@package')),
+    #         'versionCode': str(tmp.get('@android:versionCode')),
+    #         'versionName': str(tmp.get('@android:versionName')),
+    #         }
+    info = {'package': str(apk.get_package_name()),
+            'versionCode': str(apk.get_version_code()),
+            'versionName': str(apk.get_version_name()),
             }
     return info
 

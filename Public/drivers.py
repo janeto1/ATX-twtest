@@ -13,12 +13,12 @@ from Public.basepage import BasePage
 from Public.maxim_monkey import Maxim
 from Public.log import Log
 from Public.test_data import *
+from Public.config import local_log_path, create_dir
 from Public.report import *
 from logzero import logger
 
 
 # from Public.chromedriver import ChromeDriver
-
 
 
 class Drivers:
@@ -65,7 +65,7 @@ class Drivers:
             log.e('AssertionError, %s' % e)
 
     @staticmethod
-    def _run_maxim(run, cases, command, actions, widget_black):
+    def _run_maxim(run, cases, command, actions, widget_black, logpath):
         log = Log()
         log.set_logger(run.get_device()['model'], os.path.join(run.get_path(), 'client.log'))
         log.i('udid: %s', run.get_device()['udid'])
@@ -86,13 +86,15 @@ class Drivers:
             base_page.d.shell('logcat -c')  # 清空logcat
             if cases:
                 run.run_cases(cases)
+            base_page.d.shell(f'mkdir -p {logpath}')
             Maxim().run_monkey(monkey_shell=command, actions=actions, widget_black=widget_black)
-
-            base_page.d.shell('logcat -d > /sdcard/logcat.log')
+            base_page.d.shell(f'logcat -d > {logpath}/logcat.log')
             time.sleep(1)
-            base_page.d.pull('/sdcard/logcat.log', os.path.join(path.get_path(), 'logcat.log'))
-            base_page.d.pull('/sdcard/monkeyerr.txt', os.path.join(path.get_path(), 'monkeyerr.txt'))
-            base_page.d.pull('/sdcard/monkeyout.txt', os.path.join(path.get_path(), 'monkeyout.txt'))
+            log_path = os.path.join(local_log_path, logpath.split('/')[-1])
+            create_dir(log_path)
+            base_page.d.pull(f'{logpath}/logcat.log', f'{log_path}/logcat.log')
+            base_page.d.pull(f'{logpath}/monkeyerr.txt', f'{log_path}/monkeyerr.txt')
+            base_page.d.pull(f'{logpath}/monkeyout.txt', f'{log_path}/monkeyout.txt')
 
             base_page.set_original_ime()
             base_page.identify()
@@ -103,7 +105,7 @@ class Drivers:
         except AssertionError as e:
             log.e('AssertionError, %s', e)
 
-    def run(self, devices, cases, apk_info,retry=3,save_last_try=True):
+    def run(self, devices, cases, apk_info, retry=3, save_last_try=True):
         if not devices:
             logger.error('There is no device found,test over.')
             return
@@ -131,9 +133,9 @@ class Drivers:
                     build_time, apk_info['url'], apk_info['url'], apk_info["package"], apk_info["versionName"],
                     apk_info["versionCode"])
 
-        create_statistics_report(runs, title=title,sreport_path=apk_info['folder'])
+        create_statistics_report(runs, title=title, sreport_path=apk_info['folder'])
 
-    def run_maxim(self, cases=None, command=None, actions=False, widget_black=False):
+    def run_maxim(self, cases=None, command=None, actions=False, widget_black=False, logpath=None):
         # start_time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         devices = check_devives()
         if not devices:
@@ -149,11 +151,8 @@ class Drivers:
         pool = Pool(processes=len(runs))
         for run in runs:
             pool.apply_async(self._run_maxim,
-                             args=(run, cases, command, actions, widget_black,))
+                             args=(run, cases, command, actions, widget_black, logpath))
         print('Waiting for all runs done........ ')
         pool.close()
         pool.join()
         print('All runs done........ ')
-
-
-

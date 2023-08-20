@@ -7,7 +7,7 @@ import unittest
 from Demo.Page import login
 
 apk_path = '../Public/static/android_app_bootstrap-debug.apk'
-pkg_name = 'com.github.android_app_bootstrap'
+pkg_name = 'com.agentplusstudio'
 
 
 class abcd(unittest.TestCase, BasePage):
@@ -24,9 +24,6 @@ class abcd(unittest.TestCase, BasePage):
         self.d.app_start(pkg_name)
         self.set_fastinput_ime()
         time.sleep(3)
-        login.login_page().input_username('username')
-        login.login_page().input_password('password')
+        login.login_page().input_username('yangpeng8')
+        login.login_page().input_password('test.1234')
         login.login_page().click_login_btn()
-
-
-

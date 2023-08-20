@@ -1,0 +1,12 @@
+*.idea
+**/__pycache__
+*.pyc
+/tw_auto_test/api_test/migrations/00*.py
+*.log
+/tw_auto_test/db.sqlite3
+/tw_auto_test/tw_auto_test/settings.py
+/tw_auto_test/static/report
+/tw_auto_test/*.pid
+dist
+build
+/venv
