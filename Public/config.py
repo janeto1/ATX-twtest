@@ -15,6 +15,8 @@ bundle_tool_path = os.path.join(current_path, 'static', 'bundletool-all.jar')
 tmp_apks_path = os.path.join(current_path, 'tmp.apks')
 ks_path = os.path.join(current_path, 'static', 'ksfile')
 maxin_path = os.path.join(current_path, 'Maxim')
+fastbot_path = os.path.join(current_path, 'Fastbot')
+fastbot_path_libs = os.path.join(fastbot_path, 'libs')
 
 unlock_apk = os.path.join(current_path, 'static', 'unlock.apk')
 test_apk = os.path.join(current_path, 'static', 'android_app_bootstrap-debug.apk')

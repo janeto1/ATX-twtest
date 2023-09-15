@@ -1,7 +1,9 @@
 [
 {
-    "activity":"com.panda.videoliveplatform.activity.MainFragmentActivity",
-    "xpath": "//*[@class='android.widget.TextView' and @text='我的校园' and @resource-id='com.panda.videoliveplatform:id/tv_title']"
+    "activity":"com.taiwu.find.MainActivity",
+    "xpath": "//*[@class='android.widget.TextView' and @text='安全退出']",
+    "index": 0,
+    "bounds": "[614,1364][212,78]"
 },
 {
     "activity":"com.panda.videoliveplatform.activity.MainFragmentActivity",

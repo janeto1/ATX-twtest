@@ -29,7 +29,7 @@ class Maxim(BasePage):
 
     @classmethod
     def command(cls, package, runtime, mode=None, whitelist=False, blacklist=False, throttle=None, options=None,
-                off_line=True, logpath=None):
+                off_line=True):
         '''
         monkey命令封装
         :param package:被测app的包名
@@ -72,11 +72,7 @@ class Maxim(BasePage):
             blacklist = ''
 
         # 初始化日志目录
-        log_info = f'{logpath}/monkeyout.txt'
-        log_err = f'{logpath}/monkeyerr.txt'
-
-        off_line_cmd = f' >{log_info} 2>{log_err} &'
-        # off_line_cmd = ' >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &'
+        off_line_cmd = ' >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &'
         if off_line:
             monkey_shell = (
                 ''.join([classpath, package, runtime, mode, whitelist, blacklist, throttle, options, off_line_cmd]))
@@ -113,6 +109,7 @@ class Maxim(BasePage):
             cls.push_actions()
         if widget_black:
             cls.push_widget_black()
+
         cls.set_AdbIME()
         runtime = monkey_shell.split('running-minutes ')[1].split(' ')[0]
         log.i('starting run monkey')
@@ -177,7 +174,7 @@ class Maxim(BasePage):
     @classmethod
     def set_AdbIME(cls):
         log.i('setting AdbIME as default')
-        ime = cls.d.shell('ime list -s').output
+        ime = cls.d.shell('ime list -a').output
         if 'adbkeyboard' in ime:
             cls.d.shell('ime set com.android.adbkeyboard/.AdbIME')
         else:

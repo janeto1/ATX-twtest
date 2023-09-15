@@ -8,6 +8,7 @@ import zipfile
 from jinja2 import Environment, FileSystemLoader
 import requests
 from logzero import logger
+import shutil
 
 # from Public.config import templete_html
 
@@ -22,9 +23,9 @@ def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
 
 
-def create_index_html(path_list, title,sreport_path):
+def create_index_html(path_list, title, sreport_path):
     '''以Pubilc/index.html 生成 自动化测试报告.html'''
-    name = os.path.join(sreport_path,"TestReport/Statistics_report.html")
+    name = os.path.join(sreport_path, "TestReport/Statistics_report.html")
     urls = path_list
     context = {
         'urls': urls,
@@ -69,7 +70,7 @@ def create_statistics_report(runs, title=None, sreport_path=None):
         tmp_dic['name'] = run.get_device()['brand'] + ' ' + run.get_device()['model']
         tmp_dic.update(_get_report_info(run))
         report_path_list.append(tmp_dic)
-    create_index_html(report_path_list, title=title,sreport_path=sreport_path)
+    create_index_html(report_path_list, title=title, sreport_path=sreport_path)
     logger.info('Generate statistics report completed........ ')
     return report_path_list
 
@@ -87,6 +88,21 @@ def backup_report(folder):
         except PermissionError as e:
             raise e
         logger.info('Backup TestReport dir success')
+    # return './TestReport_History/Report_' + time
+
+
+def backup_monkey_report(backfolder, filefolder):
+    '''备份旧报告 TestReport文件夹'''
+    date = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+    if not os.path.exists(os.path.join(backfolder, filefolder)):
+        os.mkdir(os.path.join(backfolder, filefolder))
+
+    try:
+        shutil.move(os.path.join(filefolder), os.path.join(backfolder, filefolder, date))
+        os.mkdir(os.path.join(filefolder))
+    except PermissionError as e:
+        raise e
+    logger.info('Backup TestReport dir success')
     # return './TestReport_History/Report_' + time
 
 #

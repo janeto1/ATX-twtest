@@ -5,11 +5,12 @@ from uiautomator2 import UiObjectNotFoundError
 import re
 from Public.reportpath import ReportPath
 from Public.test_data import get_apk_info
-from Public.config import internalapp,unlock_apk
+from Public.config import internalapp, unlock_apk
 # from Public.chromedriver import ChromeDriver
 # from Public.ports import Ports
 
 from Public.log import Log
+
 log = Log()
 
 
@@ -37,7 +38,7 @@ class BasePage(object):
             if packagename in internalapp:
                 for f in internalapp[packagename]['app_folder']:
                     log.i('remove folder :%s' % f)
-                    cls.d.shell('rm -rf %s' % f)   # 删除app的本地所在文件夹
+                    cls.d.shell('rm -rf %s' % f)  # 删除app的本地所在文件夹
             else:
                 log.i('internalapp%s的配置信息' % packagename)
         else:
@@ -49,7 +50,7 @@ class BasePage(object):
         file_name = os.path.basename(apk_path)
         dst = '/data/local/tmp/' + file_name
         log.i('pushing %s to device' % file_name)
-        cls.d.push(apk_path, dst,show_progress=True)
+        cls.d.push(apk_path, dst, show_progress=True)
         log.i('start install %s' % dst)
         if cls.d.device_info['brand'] == 'vivo':
             '''Vivo 手机通过打开文件管理 安装app'''
@@ -61,7 +62,7 @@ class BasePage(object):
                 s(resourceId="com.android.packageinstaller:id/ok_button").click()
                 log.i(s(resourceId="com.android.packageinstaller:id/checked_result").get_text())
 
-        elif cls.d.device_info['brand'] == 'OPPO':
+        elif cls.d.device_info['brand'] == 'OPPO1':
             with cls.d.session("com.coloros.filemanager") as s:
                 s(resourceId="com.coloros.filemanager:id/action_file_browser").click()
                 s(className="android.app.ActionBar$Tab", instance=1).click()
@@ -109,10 +110,9 @@ class BasePage(object):
         else:
             #  appium unlock.apk 下载安装
             log.i('installing io.appium.unlock')
-            cls.local_install(unlock_apk, clear=False,uninstall=False)
+            cls.local_install(unlock_apk, clear=False, uninstall=False)
             cls.d.app_start('io.appium.unlock')
             cls.d.shell('input keyevent 3')
-
 
     @classmethod
     def back(cls):
@@ -157,7 +157,6 @@ class BasePage(object):
         # time.sleep(2)
         ctx.stop()
 
-
     @classmethod
     def get_toast_message(cls):
         message = cls.d.toast.get_message(3, 3)
@@ -175,16 +174,15 @@ class BasePage(object):
         cls.d.set_fastinput_ime(False)
 
     @classmethod
-    def screenshot(cls,text='Manual_'):
+    def screenshot(cls, text='Manual_'):
         '''截图并打印特定格式的输出，保证用例显示截图'''
         date_time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-        screenshot_name = text + date_time + '.PNG'     # HTMLTestReport
+        screenshot_name = text + date_time + '.PNG'  # HTMLTestReport
         # screenshot_name = 'screenshot_' + cls.__qualname__ + '-' + date_time + '.png'     # ExtentHTMLRunner
         path = os.path.join(ReportPath().get_path(), screenshot_name)
         cls.d.screenshot(path)
-        log.i('IMAGE:' + screenshot_name)   # HTMLTestReport
+        log.i('IMAGE:' + screenshot_name)  # HTMLTestReport
         # print(screenshot_name)       # ExtentHTMLRunner
-
 
     @classmethod
     def startscreenrecord(cls):
@@ -196,13 +194,11 @@ class BasePage(object):
         cls.d.screenrecord(path)
         log.i('IMAGE:' + screenrecord_name)  # HTMLTestReport
 
-
     @classmethod
     def stopscreenrecord(cls):
         '''结束录屏'''
         time.sleep(0.5)
         cls.d.screenrecord.stop()
-
 
     @staticmethod
     def find_message(elements, text):
@@ -225,24 +221,24 @@ class BasePage(object):
         return x, y
 
     @staticmethod
-    def _get_element_size(element,per=50):
+    def _get_element_size(element, per=50):
         '''获取滑动对应坐标'''
         # rect = element.info['visibleBounds']
         rect = element.info['bounds']
         # print(rect)
         x_center = (rect['left'] + rect['right']) / 2
         y_center = (rect['bottom'] + rect['top']) / 2
-        x_d = (rect['right']-rect['left'])*(0.5-per/200)  # x轴缩短距离
-        y_d = (rect['bottom']-rect['top'])*(0.5-per/200)  # y轴缩短距离
-        x_left = rect['left']+x_d
-        y_up = rect['top']+y_d
-        x_right = rect['right']-x_d
-        y_down = rect['bottom']-y_d
+        x_d = (rect['right'] - rect['left']) * (0.5 - per / 200)  # x轴缩短距离
+        y_d = (rect['bottom'] - rect['top']) * (0.5 - per / 200)  # y轴缩短距离
+        x_left = rect['left'] + x_d
+        y_up = rect['top'] + y_d
+        x_right = rect['right'] - x_d
+        y_down = rect['bottom'] - y_d
 
         return x_left, y_up, x_center, y_center, x_right, y_down
 
     def _swipe(self, fromX, fromY, toX, toY, steps):
-        self.d.swipe(fromX, fromY, toX, toY, duration=1,steps=steps)
+        self.d.swipe(fromX, fromY, toX, toY, duration=1, steps=steps)
 
     def swipe_up(self, element=None, steps=40, per=50):
         """
@@ -262,9 +258,9 @@ class BasePage(object):
         else:
             x, y = self._get_window_size()
             fromX = 0.5 * x
-            fromY = (0.5+per/200) * y
+            fromY = (0.5 + per / 200) * y
             toX = 0.5 * x
-            toY = (0.5-per/200) * y
+            toY = (0.5 - per / 200) * y
 
         self._swipe(fromX, fromY, toX, toY, steps)
 
@@ -278,7 +274,7 @@ class BasePage(object):
         """
         log.i('swipe_down')
         if element:
-            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element,per)
+            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element, per)
 
             fromX = x_center
             fromY = y_up
@@ -287,13 +283,13 @@ class BasePage(object):
         else:
             x, y = self._get_window_size()
             fromX = 0.5 * x
-            fromY = (0.5-per/200) * y
+            fromY = (0.5 - per / 200) * y
             toX = 0.5 * x
-            toY = (0.5+per/200) * y
+            toY = (0.5 + per / 200) * y
 
         self._swipe(fromX, fromY, toX, toY, steps)
 
-    def swipe_left(self, element=None, steps=40,per=50):
+    def swipe_left(self, element=None, steps=40, per=50):
         """
         swipe left
         :param per:滑动距离占元素总长的百分占比
@@ -303,16 +299,16 @@ class BasePage(object):
         """
         log.i('swipe left')
         if element:
-            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element,per)
+            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element, per)
             fromX = x_right
             fromY = y_center
             toX = x_left
             toY = y_center
         else:
             x, y = self._get_window_size()
-            fromX = (0.5+per/200) * x
+            fromX = (0.5 + per / 200) * x
             fromY = 0.5 * y
-            toX = (0.5-per/200) * x
+            toX = (0.5 - per / 200) * x
             toY = 0.5 * y
         self._swipe(fromX, fromY, toX, toY, steps)
 
@@ -325,7 +321,7 @@ class BasePage(object):
         :return: None
         """
         if element:
-            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element,per)
+            x_left, y_up, x_center, y_center, x_right, y_down = self._get_element_size(element, per)
             fromX = x_left
             fromY = y_center
             toX = x_right
@@ -333,9 +329,9 @@ class BasePage(object):
         else:
             log.i('swipe right')
             x, y = self._get_window_size()
-            fromX = (0.5-per/200) * x
+            fromX = (0.5 - per / 200) * x
             fromY = 0.5 * y
-            toX = (0.5+per/200) * x
+            toX = (0.5 + per / 200) * x
             toY = 0.5 * y
         self._swipe(fromX, fromY, toX, toY, steps)
 
@@ -384,10 +380,20 @@ class BasePage(object):
         return self._find_element_by_swipe('right', value,
                                            element=element, steps=steps, max_swipe=max_swipe)
 
+    def wait_element(self, element, times=3):
+        total = 0
+        flag = False
+        while total <= times:
+            time.sleep(3)
+            flag = element.exist
+            total += 1
+            if flag:
+                break
+        return flag
 
 
 if __name__ == '__main__':
-    d =BasePage()
+    d = BasePage()
     d.set_driver('')
     Log().set_logger('udid', './log.log')
     # d.unlock_device()

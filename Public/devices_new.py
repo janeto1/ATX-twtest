@@ -68,6 +68,7 @@ def connect_devices(udids=None):
 def check_alive(device):
     if isinstance(device, dict): # atxserver2
         d = u2.connect(device['source']['atxAgentAddress'])
+        d.screen_on()
         # if d.agent_alive:
         #     d.healthcheck()
         #     if d.alive:
@@ -96,6 +97,7 @@ def check_alive(device):
 
     else:  # USB
         d = u2.connect(device)
+        d.screen_on()
         # if d.agent_alive:
         #     d.healthcheck()
         #     if d.alive:
@@ -150,7 +152,6 @@ def check_devives(method='USB', udids=None):
 
     else:
         raise Exception('Config.ini method illegal:method =%s' % method)
-
     return devices
 
 if __name__ == '__main__':

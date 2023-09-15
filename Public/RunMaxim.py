@@ -12,7 +12,9 @@ class RunMaxim:
         if not os.path.exists(self.test_report_root):
             os.mkdir(self.test_report_root)
 
-        self.test_report_path = os.path.join(self.test_report_root, self.device['model'].replace(':', '_').replace(' ', '')+'_'+self.device['serial'])
+        self.test_report_path = os.path.join(self.test_report_root,
+                                             self.device['brand'].replace(':', '_').replace(' ', '') + '_' +
+                                             self.device['serial'])
 
         if not os.path.exists(self.test_report_path):
             os.mkdir(self.test_report_path)
@@ -28,5 +30,27 @@ class RunMaxim:
         runner.run(cases)
 
 
+class RunTWmonkey:
+    def __init__(self, device, report):
+        self.test_report_root = f'./{report}'  # './TWmonkeyReport'
+        self.device = device
 
+        if not os.path.exists(self.test_report_root):
+            os.mkdir(self.test_report_root)
 
+        self.test_report_path = os.path.join(self.test_report_root,
+                                             self.device['brand'].replace(':', '_').replace(' ', '') + '_' +
+                                             self.device['serial'])
+
+        if not os.path.exists(self.test_report_path):
+            os.mkdir(self.test_report_path)
+
+    def get_path(self):
+        return self.test_report_path
+
+    def get_device(self):
+        return self.device
+
+    def run_cases(self, cases):
+        runner = unittest.TextTestRunner()
+        runner.run(cases)

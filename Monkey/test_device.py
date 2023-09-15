@@ -2,11 +2,11 @@ import time
 
 import uiautomator2 as u2
 
-d = u2.connect_adb_wifi("172.25.205.201")
+d = u2.connect_adb_wifi("172.25.207.182:5000")
 # 亮屏
 # d.screen_on()
 # d.session("com.agentplusstudio")
-d.app_start("com.agentplusstudio")
+d.app_start("com.taiwu.find")
 # d.implicitly_wait(5)
 # d.click(0.316, 0.337)
 # d.clear_text()
@@ -18,12 +18,14 @@ d.app_start("com.agentplusstudio")
 # time.sleep(2)
 # d(className='android.widget.TextView', text='房源').click()
 # d.click(0.29, 0.973)
-d.shell('mkdir -p /sdcard/max-output/20230818153542/')
+# d.shell('mkdir -p /sdcard/max-output/20230818153542/')
 # d.shell('/sdcard/max-output/20230818153542/monkeyout.txt')
 # d.shell('/sdcard/max-output/20230818153542/monkeyerr.txt')
-d.pull('/sdcard/max-output/20230818153542/monkeyout.txt', 'D:/code/ATX-Test/log/1233334.txt')
+# d.pull('/sdcard/max-output/20230818153542/monkeyout.txt', 'D:/code/ATX-Test/log/1233334.txt')
+commond = "CLASSPATH=/sdcard/monkey.jar:/sdcard/framework.jar exec app_process /system/bin tv.panda.test.monkey.Monkey -p com.taiwu.find --running-minutes 120 --uiautomatormix --act-whitelist-file /sdcard/awl.strings --throttle 500  -v -v  >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &"
+output, exit_code = d.shell(commond)
 # output, exit_code = d.shell("ps -A", timeout=60)
-# print(output)
+print(output)
 # for i in range(50):
 #     d.drag(0.584, 0.264, 0.599, 0.629)
 #

@@ -2,12 +2,15 @@ import logging
 
 
 class Log:
+    def __init__(self):
+        self.logger = logging.getLogger()
+
     @classmethod
     def set_logger(cls, udid, file):
         logger = logging.getLogger('ATX')
         logger.setLevel(logging.DEBUG)
 
-        fh = logging.FileHandler(file,encoding='utf-8')
+        fh = logging.FileHandler(file, encoding='utf-8')
         fh.setLevel(logging.DEBUG)
 
         ch = logging.StreamHandler()
