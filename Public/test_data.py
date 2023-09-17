@@ -157,6 +157,7 @@ def get_apk_info(bundle_path):
     apk = APK()
     apk.from_file(path)
     apk.parse_resouce()
+    # 修改了源码包文件 \apkutils\apk.py  get_version_code  get_version_name
     # tmp = apk.get_manifest()
     # tmp = apkutils.APK.from_file(path).get_manifest()
     # info = {'package': str(tmp.get('@package')),
