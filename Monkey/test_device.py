@@ -2,7 +2,7 @@ import time
 
 import uiautomator2 as u2
 
-d = u2.connect_adb_wifi("172.25.207.182:5000")
+d = u2.connect_usb("PQY0220C04031161")
 # 亮屏
 # d.screen_on()
 # d.session("com.agentplusstudio")
@@ -22,7 +22,7 @@ d.app_start("com.taiwu.find")
 # d.shell('/sdcard/max-output/20230818153542/monkeyout.txt')
 # d.shell('/sdcard/max-output/20230818153542/monkeyerr.txt')
 # d.pull('/sdcard/max-output/20230818153542/monkeyout.txt', 'D:/code/ATX-Test/log/1233334.txt')
-commond = "CLASSPATH=/sdcard/monkey.jar:/sdcard/framework.jar exec app_process /system/bin tv.panda.test.monkey.Monkey -p com.taiwu.find --running-minutes 120 --uiautomatormix --act-whitelist-file /sdcard/awl.strings --throttle 500  -v -v  >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &"
+commond = "CLASSPATH=/sdcard/monkeyq.jar:/sdcard/framework.jar:/sdcard/fastbot-thirdpart.jar exec app_process /system/bin com.android.commands.monkey.Monkey -p com.taiwu.find --agent reuseq --act-whitelist-file /sdcard/awl.strings --running-minutes 1 --throttle 500  -v -v  >/sdcard/monkeyout.txt 2>/sdcard/monkeyerr.txt &"
 output, exit_code = d.shell(commond)
 # output, exit_code = d.shell("ps -A", timeout=60)
 print(output)

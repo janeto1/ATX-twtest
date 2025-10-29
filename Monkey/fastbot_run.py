@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # 备份旧的测试报告文件夹到Backup下
     backup_monkey_report('./Backup', './FastbotReport')
     package = 'com.taiwu.find'
-    maximTime = 240  # 分钟
+    maximTime = 240 # 分钟
     cases = unittest.TestSuite()
     cases.addTest(login_steps.abcd('test_login_user'))
 

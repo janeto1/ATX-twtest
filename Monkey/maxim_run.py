@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     current_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
-    command = Maxim().command(package=package, runtime=maximTime, mode='',
+    command = Maxim().command(package=package, runtime=maximTime, mode='uiautomatormix',
                               throttle=500,
                               options=' -v -v ', whitelist=True)
     print(command)

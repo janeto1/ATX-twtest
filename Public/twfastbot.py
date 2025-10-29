@@ -106,9 +106,9 @@ class TWfastBot(BasePage):
         cls.d.push(os.path.join(fastbot_path, 'fastbot-thirdpart.jar'), '/sdcard/fastbot-thirdpart.jar')
         cls.d.push(os.path.join(fastbot_path_libs, 'arm64-v8a', 'libfastbot_native.so'), '/data/local/tmp/arm64-v8a/')
         cls.d.push(os.path.join(fastbot_path_libs, 'armeabi-v7a', 'libfastbot_native.so'),
-                   '/data/local/tmp/armeabi-v7a')
-        cls.d.push(os.path.join(fastbot_path_libs, 'x86', 'libfastbot_native.so'), '/data/local/tmp/x86')
-        cls.d.push(os.path.join(fastbot_path_libs, 'x86_64', 'libfastbot_native.so'), '/data/local/tmp/x86_64')
+                   '/data/local/tmp/armeabi-v7a/')
+        cls.d.push(os.path.join(fastbot_path_libs, 'x86', 'libfastbot_native.so'), '/data/local/tmp/x86/')
+        cls.d.push(os.path.join(fastbot_path_libs, 'x86_64', 'libfastbot_native.so'), '/data/local/tmp/x86_64/')
         log.i('push fastbot config file--->monkeyq.jar framework.jar fastbot-thirdpart.jar libs')
 
     @classmethod
